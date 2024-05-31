@@ -1,20 +1,24 @@
 package gerenciadorDeEstudos.Gerenciador;
 
-import java.util.ArrayList;
-import java.util.List;
 
-class Diciplina {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class Diciplina implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String nome;
     private String dataInicio;
-    private List<String> checklist;
-    private List<String> selectedItems; // Lista de itens selecionados
+    private List<String> checklist = new ArrayList<>();
+    private Set<String> selectedItems = new HashSet<>();
     private int progresso;
 
     public Diciplina(String nome, String dataInicio) {
         this.nome = nome;
         this.dataInicio = dataInicio;
-        this.checklist = new ArrayList<>();
-        this.selectedItems = new ArrayList<>(); // Inicializa a lista de itens selecionados
         this.progresso = 0;
     }
 
@@ -30,6 +34,10 @@ class Diciplina {
         return checklist;
     }
 
+    public Set<String> getSelectedItems() {
+        return selectedItems;
+    }
+
     public int getProgresso() {
         return progresso;
     }
@@ -42,22 +50,16 @@ class Diciplina {
         checklist.add(item);
     }
 
-    public void limparChecklist() {
-        checklist.clear();
-        selectedItems.clear(); // Limpa a lista de itens selecionados
-    }
-
-    public List<String> getSelectedItems() {
-        return selectedItems;
-    }
-
     public void addSelectedItem(String item) {
-        if (!selectedItems.contains(item)) {
-            selectedItems.add(item);
-        }
+        selectedItems.add(item);
     }
 
     public void removeSelectedItem(String item) {
         selectedItems.remove(item);
+    }
+
+    public void limparChecklist() {
+        checklist.clear();
+        selectedItems.clear();
     }
 }

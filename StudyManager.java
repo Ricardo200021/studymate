@@ -3,6 +3,7 @@ package gerenciadorDeEstudos.Gerenciador;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -10,6 +11,7 @@ import javax.swing.*;
 public class StudyManager {
 
     private List<Diciplina> diciplinas = new ArrayList<>();
+    private static final String FILE_PATH = "diciplinas.dat";
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -17,6 +19,10 @@ public class StudyManager {
                 new StudyManager().createAndShowGui();
             }
         });
+    }
+
+    public StudyManager() {
+        loadDiciplinas();
     }
 
     private void createAndShowGui() {
@@ -131,6 +137,7 @@ public class StudyManager {
             String dataInicio = dataInicioField.getText();
             Diciplina diciplina = new Diciplina(nome, dataInicio);
             diciplinas.add(diciplina);
+            saveDiciplinas();
             JOptionPane.showMessageDialog(null, "Diciplina adicionada com sucesso!");
         }
     }
@@ -167,6 +174,7 @@ public class StudyManager {
                 String item = JOptionPane.showInputDialog("Matéria da diciplina:");
                 if (item != null && !item.trim().isEmpty()) {
                     materia.adicionarItemChecklist(item);
+                    saveDiciplinas();
                     JOptionPane.showMessageDialog(null, "Matéria adicionada a diciplina com sucesso!");
                 }
             }
@@ -227,6 +235,7 @@ public class StudyManager {
                     if (newProgress == 100) {
                         JOptionPane.showMessageDialog(checklistFrame, "Diciplina concluída! Progresso 100%.");
                     }
+                    saveDiciplinas();
                 }
             });
             checklistPanel.add(checkBox);
@@ -251,6 +260,7 @@ public class StudyManager {
             if (diciplina != null) {
                 diciplina.limparChecklist();
                 diciplina.setProgresso(0);
+                saveDiciplinas();
                 JOptionPane.showMessageDialog(null, "Matéria deletada com sucesso!");
             }
         }
@@ -270,9 +280,25 @@ public class StudyManager {
             Diciplina diciplina = diciplinas.stream().filter(m -> m.getNome().equals(diciplinaSelecionada)).findFirst().orElse(null);
             if (diciplina != null) {
                 diciplinas.remove(diciplina);
+                saveDiciplinas();
                 JOptionPane.showMessageDialog(null, "Diciplina deletada com sucesso!");
             }
         }
     }
-}
 
+    private void saveDiciplinas() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {
+            oos.writeObject(diciplinas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadDiciplinas() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
+            diciplinas = (List<Diciplina>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
