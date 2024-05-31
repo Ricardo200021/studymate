@@ -49,12 +49,12 @@ public class StudyManager {
         panel.add(titleLabel, gbc);
 
         // Botões
-        JButton btnAdicionarDiciplina = new JButton("Adicionar diciplina");
-        JButton btnListarDiciplinas = new JButton("Listar diciplinas");
-        JButton btnAdicionarItemChecklist = new JButton("Adicionar matéria da diciplina");
-        JButton btnListarCheckbox = new JButton("Listar matéria");
+        JButton btnAdicionarDiciplina = new JButton("Adicionar disciplina");
+        JButton btnListarDiciplinas = new JButton("Listar disciplinas");
+        JButton btnAdicionarItemChecklist = new JButton("Adicionar matéria da disciplina");
+        JButton btnListarCheckbox = new JButton("Listar matérias");
         JButton btnLimparChecklist = new JButton("Limpar matéria");
-        JButton btnDeletarDiciplina = new JButton("Deletar diciplina");
+        JButton btnDeletarDiciplina = new JButton("Deletar disciplina");
 
         // Adicionando botões ao painel
         gbc.gridy++;
@@ -124,13 +124,13 @@ public class StudyManager {
         JTextField dataInicioField = new JTextField(10);
 
         JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("Diciplina"));
+        myPanel.add(new JLabel("Disciplina"));
         myPanel.add(nomeField);
         myPanel.add(Box.createHorizontalStrut(15));
         myPanel.add(new JLabel("Início do estudo"));
         myPanel.add(dataInicioField);
 
-        int result = JOptionPane.showConfirmDialog(null, myPanel, "Adicionar Diciplina", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, myPanel, "Adicionar Disciplina", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             String nome = nomeField.getText();
@@ -138,19 +138,19 @@ public class StudyManager {
             Diciplina diciplina = new Diciplina(nome, dataInicio);
             diciplinas.add(diciplina);
             saveDiciplinas();
-            JOptionPane.showMessageDialog(null, "Diciplina adicionada com sucesso!");
+            JOptionPane.showMessageDialog(null, "Disciplina adicionada com sucesso!");
         }
     }
 
     private void listarDiciplinas() {
         if (diciplinas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nenhuma diciplina adicionada");
+            JOptionPane.showMessageDialog(null, "Nenhuma disciplina adicionada");
             return;
         }
 
         StringBuilder lista = new StringBuilder();
         for (Diciplina diciplina : diciplinas) {
-            lista.append("Diciplina: ").append(diciplina.getNome())
+            lista.append("Disciplina: ").append(diciplina.getNome())
                     .append(", Data de Início: ").append(diciplina.getDataInicio())
                     .append(", Progresso: ").append(diciplina.getProgresso()).append("%\n");
         }
@@ -160,22 +160,22 @@ public class StudyManager {
 
     private void adicionarItemChecklist() {
         if (diciplinas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nenhuma diciplina adicionada.");
+            JOptionPane.showMessageDialog(null, "Nenhuma matéria adicionada.");
             return;
         }
 
         String[] nomesDiciplinas = diciplinas.stream().map(Diciplina::getNome).toArray(String[]::new);
-        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a diciplina:",
-                "Adicionar Item ao Checklist", JOptionPane.QUESTION_MESSAGE, null, nomesDiciplinas, nomesDiciplinas[0]);
+        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a disciplina:",
+                "Adicionar matéria a disciplina", JOptionPane.QUESTION_MESSAGE, null, nomesDiciplinas, nomesDiciplinas[0]);
 
         if (diciplinaSelecionada != null) {
             Diciplina materia = diciplinas.stream().filter(m -> m.getNome().equals(diciplinaSelecionada)).findFirst().orElse(null);
             if (materia != null) {
-                String item = JOptionPane.showInputDialog("Matéria da diciplina:");
+                String item = JOptionPane.showInputDialog("Matéria da disciplina:");
                 if (item != null && !item.trim().isEmpty()) {
                     materia.adicionarItemChecklist(item);
                     saveDiciplinas();
-                    JOptionPane.showMessageDialog(null, "Matéria adicionada a diciplina com sucesso!");
+                    JOptionPane.showMessageDialog(null, "Matéria adicionada a disciplina com sucesso!");
                 }
             }
         }
@@ -183,13 +183,13 @@ public class StudyManager {
 
     private void listarCheckbox() {
         if (diciplinas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nenhuma diciplina adicionada.");
+            JOptionPane.showMessageDialog(null, "Nenhuma matéria adicionada.");
             return;
         }
 
         String[] nomesDiciplinas = diciplinas.stream().map(Diciplina::getNome).toArray(String[]::new);
-        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a diciplina:",
-                "Listar matéria", JOptionPane.QUESTION_MESSAGE, null, nomesDiciplinas, nomesDiciplinas[0]);
+        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a disciplina:",
+                "Listar matérias", JOptionPane.QUESTION_MESSAGE, null, nomesDiciplinas, nomesDiciplinas[0]);
 
         if (diciplinaSelecionada != null) {
             Diciplina materia = diciplinas.stream().filter(m -> m.getNome().equals(diciplinaSelecionada)).findFirst().orElse(null);
@@ -233,7 +233,7 @@ public class StudyManager {
                     diciplina.setProgresso(newProgress);
                     progressBar.setValue(newProgress);
                     if (newProgress == 100) {
-                        JOptionPane.showMessageDialog(checklistFrame, "Diciplina concluída! Progresso 100%.");
+                        JOptionPane.showMessageDialog(checklistFrame, "Disciplina concluída! Progresso 100%.");
                     }
                     saveDiciplinas();
                 }
@@ -247,12 +247,12 @@ public class StudyManager {
 
     private void limparChecklist() {
         if (diciplinas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nenhuma diciplina adicionada.");
+            JOptionPane.showMessageDialog(null, "Nenhuma disciplina adicionada.");
             return;
         }
 
         String[] nomesDiciplinas = diciplinas.stream().map(Diciplina::getNome).toArray(String[]::new);
-        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a diciplina:",
+        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a disciplina:",
                 "Limpar matéria", JOptionPane.QUESTION_MESSAGE, null, nomesDiciplinas, nomesDiciplinas[0]);
 
         if (diciplinaSelecionada != null) {
@@ -268,20 +268,20 @@ public class StudyManager {
 
     private void deletarDiciplina() {
         if (diciplinas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Nenhuma diciplina adicionada.");
+            JOptionPane.showMessageDialog(null, "Nenhuma disciplina adicionada.");
             return;
         }
 
         String[] nomesDiciplinas = diciplinas.stream().map(Diciplina::getNome).toArray(String[]::new);
-        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a diciplina:",
-                "Deletar Diciplina", JOptionPane.QUESTION_MESSAGE, null, nomesDiciplinas, nomesDiciplinas[0]);
+        String diciplinaSelecionada = (String) JOptionPane.showInputDialog(null, "Selecione a disciplina:",
+                "Deletar disciplina", JOptionPane.QUESTION_MESSAGE, null, nomesDiciplinas, nomesDiciplinas[0]);
 
         if (diciplinaSelecionada != null) {
             Diciplina diciplina = diciplinas.stream().filter(m -> m.getNome().equals(diciplinaSelecionada)).findFirst().orElse(null);
             if (diciplina != null) {
                 diciplinas.remove(diciplina);
                 saveDiciplinas();
-                JOptionPane.showMessageDialog(null, "Diciplina deletada com sucesso!");
+                JOptionPane.showMessageDialog(null, "Disciplina deletada com sucesso!");
             }
         }
     }
